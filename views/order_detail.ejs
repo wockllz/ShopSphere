@@ -1,0 +1,89 @@
+<%- include('partials/header') %>
+
+<div class="container page-wrapper">
+  <% if (typeof isSuccess !== 'undefined' && isSuccess) { %>
+    <div class="order-success-banner">
+      <div class="success-icon">
+        <i class="fa-solid fa-circle-check"></i>
+      </div>
+      <div>
+        <h2>Order Confirmed! Thank you for your purchase.</h2>
+        <p>Your order <strong>#ORD-<%= String(order.id).padStart(5, '0') %></strong> has been received and is being processed.</p>
+      </div>
+    </div>
+  <% } %>
+
+  <div class="page-header flex-between">
+    <div>
+      <h1>Order Details #ORD-<%= String(order.id).padStart(5, '0') %></h1>
+      <p>Placed on <%= new Date(order.created_at).toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' }) %></p>
+    </div>
+    <a href="/orders" class="btn btn-outline"><i class="fa-solid fa-arrow-left"></i> Back to Orders</a>
+  </div>
+
+  <div class="order-detail-layout">
+    <div class="order-items-column">
+      <div class="summary-card">
+        <h2>Purchased Items (<%= items.length %>)</h2>
+        <div class="order-items-table-wrapper">
+          <table class="cart-table">
+            <thead>
+              <tr>
+                <th>Item</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% items.forEach(item => { %>
+                <tr>
+                  <td class="cart-product-cell">
+                    <img src="<%= item.image_url %>" alt="<%= item.name %>" class="cart-thumb">
+                    <div class="cart-product-info">
+                      <a href="/products/<%= item.product_id %>" class="cart-product-name"><%= item.name %></a>
+                      <span class="cart-product-cat"><%= item.category %></span>
+                    </div>
+                  </td>
+                  <td>$<%= item.price.toFixed(2) %></td>
+                  <td><%= item.quantity %></td>
+                  <td><strong>$<%= (item.price * item.quantity).toFixed(2) %></strong></td>
+                </tr>
+              <% }); %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="order-info-column">
+      <div class="summary-card">
+        <h2>Delivery & Payment</h2>
+        
+        <div class="info-block">
+          <h3><i class="fa-solid fa-location-dot"></i> Shipping Address</h3>
+          <p><strong><%= order.shipping_name %></strong></p>
+          <p><%= order.shipping_address %></p>
+          <p><%= order.shipping_city %>, <%= order.shipping_zip %></p>
+        </div>
+
+        <hr class="summary-divider">
+
+        <div class="info-block">
+          <h3><i class="fa-solid fa-credit-card"></i> Payment Details</h3>
+          <p>Method: <strong><%= order.payment_method %></strong></p>
+          <p>Status: <span class="text-success"><strong>Paid / Processed</strong></span></p>
+        </div>
+
+        <hr class="summary-divider">
+
+        <div class="summary-row total-row">
+          <span>Total Paid</span>
+          <span class="total-amount">$<%= order.total_amount.toFixed(2) %></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include('partials/footer') %>

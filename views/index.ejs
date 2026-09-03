@@ -1,0 +1,112 @@
+<%- include('partials/header') %>
+
+<div class="container page-wrapper">
+
+  <% if (typeof searchQuery !== 'undefined' && searchQuery) { %>
+    <div class="search-results-banner">
+      <h2>Search results for "<%= searchQuery %>"</h2>
+      <a href="/products" class="btn btn-sm btn-outline"><i class="fa-solid fa-xmark"></i> Clear Search</a>
+    </div>
+  <% } else if (typeof selectedCategory !== 'undefined' && selectedCategory !== 'all') { %>
+    <div class="category-header-banner">
+      <h1><%= selectedCategory %> Collection</h1>
+      <p>Discover top rated items in <%= selectedCategory %></p>
+    </div>
+  <% } else { %>
+    <!-- Hero Banner -->
+    <section class="hero-banner">
+      <div class="hero-content">
+        <span class="hero-tag"><i class="fa-solid fa-fire"></i> New Season Arrivals</span>
+        <h1>Upgrade Your Tech & Style Today</h1>
+        <p>Explore high-performance electronics, modern accessories, and premium lifestyle products backed by quality guarantee.</p>
+        <div class="hero-actions">
+          <a href="#product-grid" class="btn btn-primary btn-lg">Shop Now <i class="fa-solid fa-arrow-right"></i></a>
+          <a href="/products?category=Electronics" class="btn btn-secondary btn-lg">Browse Electronics</a>
+        </div>
+      </div>
+      <div class="hero-image-grid">
+        <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=600&q=80" alt="Headphones" class="hero-img-main">
+      </div>
+    </section>
+  <% } %>
+
+  <!-- Controls Bar (Filters & Sorting) -->
+  <div class="products-header" id="product-grid">
+    <div class="products-count">
+      Showing <strong><%= products.length %></strong> product<%= products.length !== 1 ? 's' : '' %>
+    </div>
+    <form action="/products" method="GET" class="sort-form">
+      <% if (typeof selectedCategory !== 'undefined' && selectedCategory !== 'all') { %>
+        <input type="hidden" name="category" value="<%= selectedCategory %>">
+      <% } %>
+      <% if (typeof searchQuery !== 'undefined' && searchQuery) { %>
+        <input type="hidden" name="search" value="<%= searchQuery %>">
+      <% } %>
+      <label for="sort"><i class="fa-solid fa-sort"></i> Sort by:</label>
+      <select name="sort" id="sort" onchange="this.form.submit()">
+        <option value="default" <%= selectedSort === 'default' ? 'selected' : '' %>>Featured</option>
+        <option value="price-low" <%= selectedSort === 'price-low' ? 'selected' : '' %>>Price: Low to High</option>
+        <option value="price-high" <%= selectedSort === 'price-high' ? 'selected' : '' %>>Price: High to Low</option>
+        <option value="name" <%= selectedSort === 'name' ? 'selected' : '' %>>Name: A to Z</option>
+      </select>
+    </form>
+  </div>
+
+  <!-- Products Grid -->
+  <% if (products.length === 0) { %>
+    <div class="empty-state">
+      <i class="fa-solid fa-box-open empty-icon"></i>
+      <h3>No products found</h3>
+      <p>We couldn't find any products matching your search or selected filter.</p>
+      <a href="/products" class="btn btn-primary">Reset Filters</a>
+    </div>
+  <% } else { %>
+    <div class="product-grid">
+      <% products.forEach(product => { %>
+        <div class="product-card">
+          <div class="card-image-wrapper">
+            <span class="category-badge"><%= product.category %></span>
+            <a href="/products/<%= product.id %>">
+              <img src="<%= product.image_url %>" alt="<%= product.name %>" class="product-image" loading="lazy">
+            </a>
+            <% if (product.featured) { %>
+              <span class="featured-tag"><i class="fa-solid fa-star"></i> Featured</span>
+            <% } %>
+          </div>
+          <div class="card-body">
+            <div class="rating">
+              <i class="fa-solid fa-star"></i>
+              <i class="fa-solid fa-star"></i>
+              <i class="fa-solid fa-star"></i>
+              <i class="fa-solid fa-star"></i>
+              <i class="fa-solid fa-star-half-stroke"></i>
+              <span class="rating-text">(4.8)</span>
+            </div>
+            <h3 class="product-title">
+              <a href="/products/<%= product.id %>"><%= product.name %></a>
+            </h3>
+            <p class="product-desc"><%= product.description.substring(0, 85) %>...</p>
+            <div class="card-footer">
+              <div class="price-container">
+                <span class="currency">$</span>
+                <span class="price"><%= product.price.toFixed(2) %></span>
+              </div>
+              <div class="card-actions">
+                <form action="/cart/add" method="POST" class="add-to-cart-form">
+                  <input type="hidden" name="productId" value="<%= product.id %>">
+                  <input type="hidden" name="quantity" value="1">
+                  <button type="submit" class="btn btn-cart" title="Add to Cart">
+                    <i class="fa-solid fa-cart-plus"></i> Add
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% }); %>
+    </div>
+  <% } %>
+
+</div>
+
+<%- include('partials/footer') %>

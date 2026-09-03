@@ -1,0 +1,57 @@
+<%- include('partials/header') %>
+
+<div class="container page-wrapper">
+  <div class="page-header">
+    <h1><i class="fa-solid fa-boxes-packing"></i> My Order History</h1>
+    <p>Track your current orders and view previous order details.</p>
+  </div>
+
+  <% if (orders.length === 0) { %>
+    <div class="empty-state">
+      <i class="fa-solid fa-receipt empty-icon"></i>
+      <h2>No orders found</h2>
+      <p>You haven't placed any orders yet.</p>
+      <a href="/products" class="btn btn-primary"><i class="fa-solid fa-bag-shopping"></i> Start Shopping</a>
+    </div>
+  <% } else { %>
+    <div class="orders-list">
+      <% orders.forEach(order => { %>
+        <div class="order-card">
+          <div class="order-header">
+            <div class="order-meta-info">
+              <div>
+                <span class="meta-label">Order Reference</span>
+                <strong class="order-id">#ORD-<%= String(order.id).padStart(5, '0') %></strong>
+              </div>
+              <div>
+                <span class="meta-label">Date Placed</span>
+                <span><%= new Date(order.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) %></span>
+              </div>
+              <div>
+                <span class="meta-label">Total Amount</span>
+                <strong class="order-amount">$<%= order.total_amount.toFixed(2) %></strong>
+              </div>
+            </div>
+            <div class="order-status-badge status-<%= order.status.toLowerCase() %>">
+              <i class="fa-solid fa-circle-check"></i> <%= order.status %>
+            </div>
+          </div>
+
+          <div class="order-body">
+            <div class="order-summary-info">
+              <p><i class="fa-solid fa-truck"></i> Ship to: <strong><%= order.shipping_name %></strong> (<%= order.shipping_city %>, <%= order.shipping_zip %>)</p>
+              <p><i class="fa-solid fa-wallet"></i> Payment Method: <strong><%= order.payment_method %></strong></p>
+            </div>
+            <div class="order-actions">
+              <a href="/orders/<%= order.id %>" class="btn btn-outline-sm">
+                View Details & Invoice <i class="fa-solid fa-chevron-right"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      <% }); %>
+    </div>
+  <% } %>
+</div>
+
+<%- include('partials/footer') %>

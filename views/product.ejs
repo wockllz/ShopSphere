@@ -1,0 +1,137 @@
+<%- include('partials/header') %>
+
+<div class="container page-wrapper">
+  <!-- Breadcrumbs -->
+  <nav class="breadcrumb">
+    <a href="/">Home</a>
+    <i class="fa-solid fa-chevron-right"></i>
+    <a href="/products?category=<%= product.category %>"><%= product.category %></a>
+    <i class="fa-solid fa-chevron-right"></i>
+    <span class="active"><%= product.name %></span>
+  </nav>
+
+  <!-- Product Detail Section -->
+  <div class="product-detail-layout">
+    <!-- Image Column -->
+    <div class="product-detail-media">
+      <div class="main-image-frame">
+        <img src="<%= product.image_url %>" alt="<%= product.name %>" id="main-product-img">
+      </div>
+    </div>
+
+    <!-- Product Details Column -->
+    <div class="product-detail-info">
+      <span class="detail-category"><%= product.category %></span>
+      <h1 class="detail-title"><%= product.name %></h1>
+
+      <div class="detail-meta">
+        <div class="rating">
+          <i class="fa-solid fa-star"></i>
+          <i class="fa-solid fa-star"></i>
+          <i class="fa-solid fa-star"></i>
+          <i class="fa-solid fa-star"></i>
+          <i class="fa-solid fa-star"></i>
+          <span class="rating-text">5.0 (24 reviews)</span>
+        </div>
+        <div class="stock-status <%= product.stock > 0 ? 'in-stock' : 'out-of-stock' %>">
+          <i class="fa-solid <%= product.stock > 0 ? 'fa-check-circle' : 'fa-times-circle' %>"></i>
+          <%= product.stock > 0 ? `In Stock (${product.stock} available)` : 'Out of Stock' %>
+        </div>
+      </div>
+
+      <div class="detail-price-box">
+        <span class="detail-price">$<%= product.price.toFixed(2) %></span>
+        <span class="tax-info">Includes all taxes</span>
+      </div>
+
+      <p class="detail-description"><%= product.description %></p>
+
+      <!-- Add to Cart Form -->
+      <form action="/cart/add" method="POST" class="add-to-cart-form detail-form">
+        <input type="hidden" name="productId" value="<%= product.id %>">
+        
+        <div class="quantity-selector">
+          <label for="quantity">Quantity:</label>
+          <div class="qty-control">
+            <button type="button" class="qty-btn minus-btn" onclick="adjustDetailQty(-1)"><i class="fa-solid fa-minus"></i></button>
+            <input type="number" id="detail-qty" name="quantity" value="1" min="1" max="<%= product.stock %>">
+            <button type="button" class="qty-btn plus-btn" onclick="adjustDetailQty(1)"><i class="fa-solid fa-plus"></i></button>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary btn-lg btn-block" <%= product.stock <= 0 ? 'disabled' : '' %>>
+            <i class="fa-solid fa-cart-shopping"></i> Add to Cart
+          </button>
+        </div>
+      </form>
+
+      <!-- Value Props -->
+      <div class="value-props">
+        <div class="prop-item">
+          <i class="fa-solid fa-truck-fast"></i>
+          <div>
+            <strong>Free Express Shipping</strong>
+            <p>On orders above $100</p>
+          </div>
+        </div>
+        <div class="prop-item">
+          <i class="fa-solid fa-shield-halved"></i>
+          <div>
+            <strong>2-Year Warranty</strong>
+            <p>Full replacement guarantee</p>
+          </div>
+        </div>
+        <div class="prop-item">
+          <i class="fa-solid fa-rotate-left"></i>
+          <div>
+            <strong>30-Day Easy Returns</strong>
+            <p>No questions asked policy</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Related Products Section -->
+  <% if (relatedProducts && relatedProducts.length > 0) { %>
+    <section class="related-products-section">
+      <h2 class="section-title">You Might Also Like</h2>
+      <div class="product-grid">
+        <% relatedProducts.forEach(rel => { %>
+          <div class="product-card">
+            <div class="card-image-wrapper">
+              <span class="category-badge"><%= rel.category %></span>
+              <a href="/products/<%= rel.id %>">
+                <img src="<%= rel.image_url %>" alt="<%= rel.name %>" class="product-image">
+              </a>
+            </div>
+            <div class="card-body">
+              <h3 class="product-title">
+                <a href="/products/<%= rel.id %>"><%= rel.name %></a>
+              </h3>
+              <div class="card-footer">
+                <span class="price">$<%= rel.price.toFixed(2) %></span>
+                <a href="/products/<%= rel.id %>" class="btn btn-outline-sm">View</a>
+              </div>
+            </div>
+          </div>
+        <% }); %>
+      </div>
+    </section>
+  <% } %>
+</div>
+
+<script>
+  function adjustDetailQty(delta) {
+    const input = document.getElementById('detail-qty');
+    const max = parseInt(input.getAttribute('max')) || 99;
+    let val = parseInt(input.value) || 1;
+    val += delta;
+    if (val < 1) val = 1;
+    if (val > max) val = max;
+    input.value = val;
+  }
+</script>
+
+<%- include('partials/footer') %>
