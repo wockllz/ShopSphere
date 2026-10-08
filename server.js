@@ -34,7 +34,7 @@ app.use(
       db: 'sessions.db',
       dir: path.join(__dirname, 'db')
     }),
-    secret: process.env.SESSION_SECRET || 'codealpha-ecommerce-secret-key-2026',
+    secret: process.env.SESSION_SECRET || 'shopsphere-secret-key-2026',
     resave: false,
     saveUninitialized: true,
     cookie: {
@@ -72,7 +72,7 @@ async function startServer() {
     await seed();
     app.listen(PORT, () => {
       console.log(`==================================================`);
-      console.log(`🚀 CodeAlpha E-Commerce Store is running!`);
+      console.log(`🚀 ShopSphere is running!`);
       console.log(`🌐 Server active at: http://localhost:${PORT}`);
       console.log(`==================================================`);
     });

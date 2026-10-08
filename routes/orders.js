@@ -12,7 +12,7 @@ router.get('/checkout', requireAuth, (req, res) => {
   }
 
   res.render('checkout', {
-    title: 'Checkout - CodeAlpha Store',
+    title: 'Checkout - ShopSphere',
     error: null
   });
 });
@@ -29,7 +29,7 @@ router.post('/orders/checkout', requireAuth, async (req, res) => {
 
   if (!shipping_name || !shipping_address || !shipping_city || !shipping_zip || !payment_method) {
     return res.render('checkout', {
-      title: 'Checkout - CodeAlpha Store',
+      title: 'Checkout - ShopSphere',
       error: 'Please fill in all shipping and payment fields.'
     });
   }
@@ -75,7 +75,7 @@ router.post('/orders/checkout', requireAuth, async (req, res) => {
   } catch (err) {
     console.error('Error placing order:', err);
     res.render('checkout', {
-      title: 'Checkout - CodeAlpha Store',
+      title: 'Checkout - ShopSphere',
       error: 'An error occurred while placing your order. Please try again.'
     });
   }
@@ -99,13 +99,13 @@ router.get('/orders', requireAuth, async (req, res) => {
     }
 
     res.render('orders', {
-      title: 'My Orders - CodeAlpha Store',
+      title: 'My Orders - ShopSphere',
       orders
     });
   } catch (err) {
     console.error('Error fetching user orders:', err);
     res.status(500).render('orders', {
-      title: 'My Orders - CodeAlpha Store',
+      title: 'My Orders - ShopSphere',
       orders: [],
       error: 'Failed to retrieve orders.'
     });
@@ -140,7 +140,7 @@ router.get('/orders/:id', requireAuth, async (req, res) => {
     );
 
     res.render('order_detail', {
-      title: `Order #${order.id} - CodeAlpha Store`,
+      title: `Order #${order.id} - ShopSphere`,
       order,
       items,
       isSuccess

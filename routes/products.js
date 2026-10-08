@@ -46,7 +46,7 @@ router.get(['/', '/products'], async (req, res) => {
     );
 
     res.render('index', {
-      title: 'CodeAlpha E-Commerce Store',
+      title: 'ShopSphere',
       products,
       categories,
       selectedCategory: category,
@@ -57,7 +57,7 @@ router.get(['/', '/products'], async (req, res) => {
   } catch (err) {
     console.error('Error fetching products:', err);
     res.status(500).render('index', {
-      title: 'CodeAlpha E-Commerce Store',
+      title: 'ShopSphere',
       products: [],
       categories: [],
       selectedCategory: 'all',
@@ -95,7 +95,7 @@ router.get('/products/:id', async (req, res) => {
     );
 
     res.render('product', {
-      title: `${product.name} - CodeAlpha Store`,
+      title: `${product.name} - ShopSphere`,
       product,
       relatedProducts
     });

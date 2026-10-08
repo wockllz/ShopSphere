@@ -1,6 +1,6 @@
-# CodeAlpha_EcommerceStore
+# ShopSphere
 
-A full-stack e-commerce store built for the **CodeAlpha Full Stack Development Internship** (Task 1: Simple E-commerce Store).
+A full-stack e-commerce store with product listings, cart, checkout, and secure user authentication.
 
 ## Features
 
@@ -31,8 +31,8 @@ A full-stack e-commerce store built for the **CodeAlpha Full Stack Development I
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/wockllz/CodeAlpha_EcommerceStore.git
-cd CodeAlpha_EcommerceStore
+git clone https://github.com/wockllz/ShopSphere.git
+cd ShopSphere
 
 # 2. Install dependencies
 npm install
@@ -56,7 +56,7 @@ You can register your own account, or use a seeded demo account:
 ## Project Structure
 
 ```
-CodeAlpha_EcommerceStore/
+ShopSphere/
 ├── server.js            # Express app entry point
 ├── db/
 │   ├── schema.sql       # Database schema
@@ -84,4 +84,4 @@ CodeAlpha_EcommerceStore/
 
 ## Author
 
-**Ntshuxeko Sambo** — CodeAlpha Full Stack Development Intern (Student ID: CA/DF1/260876)
+**Ntshuxeko Sambo** — Full-Stack Developer

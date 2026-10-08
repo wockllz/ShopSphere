@@ -1,4 +1,4 @@
-// Client-side JavaScript for CodeAlpha E-Commerce Store
+// Client-side JavaScript for ShopSphere
 
 document.addEventListener('DOMContentLoaded', () => {
   initAddToCartForms();

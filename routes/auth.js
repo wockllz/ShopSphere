@@ -10,7 +10,7 @@ router.get('/login', (req, res) => {
   }
   const message = req.query.message || null;
   const redirect = req.query.redirect || '/';
-  res.render('login', { title: 'Sign In - CodeAlpha Store', error: null, message, redirect });
+  res.render('login', { title: 'Sign In - ShopSphere', error: null, message, redirect });
 });
 
 // Handle Login Form Submission
@@ -20,7 +20,7 @@ router.post('/login', async (req, res) => {
   try {
     if (!email || !password) {
       return res.render('login', {
-        title: 'Sign In - CodeAlpha Store',
+        title: 'Sign In - ShopSphere',
         error: 'Please fill in all fields.',
         message: null,
         redirect: redirect || '/'
@@ -30,7 +30,7 @@ router.post('/login', async (req, res) => {
     const user = await db.get('SELECT * FROM users WHERE email = ?', [email.trim()]);
     if (!user) {
       return res.render('login', {
-        title: 'Sign In - CodeAlpha Store',
+        title: 'Sign In - ShopSphere',
         error: 'Invalid email or password.',
         message: null,
         redirect: redirect || '/'
@@ -40,7 +40,7 @@ router.post('/login', async (req, res) => {
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res.render('login', {
-        title: 'Sign In - CodeAlpha Store',
+        title: 'Sign In - ShopSphere',
         error: 'Invalid email or password.',
         message: null,
         redirect: redirect || '/'
@@ -61,7 +61,7 @@ router.post('/login', async (req, res) => {
   } catch (err) {
     console.error('Login error:', err);
     res.render('login', {
-      title: 'Sign In - CodeAlpha Store',
+      title: 'Sign In - ShopSphere',
       error: 'An unexpected error occurred. Please try again.',
       message: null,
       redirect: redirect || '/'
@@ -74,7 +74,7 @@ router.get('/register', (req, res) => {
   if (req.session.user) {
     return res.redirect('/');
   }
-  res.render('register', { title: 'Create Account - CodeAlpha Store', error: null });
+  res.render('register', { title: 'Create Account - ShopSphere', error: null });
 });
 
 // Handle Register Form Submission
@@ -84,14 +84,14 @@ router.post('/register', async (req, res) => {
   try {
     if (!username || !email || !password || !full_name) {
       return res.render('register', {
-        title: 'Create Account - CodeAlpha Store',
+        title: 'Create Account - ShopSphere',
         error: 'All fields are required.'
       });
     }
 
     if (password.length < 6) {
       return res.render('register', {
-        title: 'Create Account - CodeAlpha Store',
+        title: 'Create Account - ShopSphere',
         error: 'Password must be at least 6 characters long.'
       });
     }
@@ -104,7 +104,7 @@ router.post('/register', async (req, res) => {
 
     if (existingUser) {
       return res.render('register', {
-        title: 'Create Account - CodeAlpha Store',
+        title: 'Create Account - ShopSphere',
         error: 'Email or Username is already registered.'
       });
     }
@@ -129,7 +129,7 @@ router.post('/register', async (req, res) => {
   } catch (err) {
     console.error('Registration error:', err);
     res.render('register', {
-      title: 'Create Account - CodeAlpha Store',
+      title: 'Create Account - ShopSphere',
       error: 'Registration failed. Please try again.'
     });
   }

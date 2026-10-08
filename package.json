@@ -1,7 +1,7 @@
 {
-  "name": "codealpha-ecommerce-store",
+  "name": "shopsphere",
   "version": "1.0.0",
-  "description": "Full-stack E-commerce Store application for CodeAlpha internship submission Task 1",
+  "description": "Full-stack e-commerce store with cart, checkout and order history",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
@@ -9,13 +9,13 @@
   },
   "keywords": [
     "ecommerce",
-    "codealpha",
+    "shopsphere",
     "express",
     "nodejs",
     "sqlite",
     "ejs"
   ],
-  "author": "CodeAlpha Intern",
+  "author": "Ntshuxeko Sambo",
   "license": "ISC",
   "dependencies": {
     "bcryptjs": "^2.4.3",

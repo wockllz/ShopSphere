@@ -5,7 +5,7 @@ const db = require('../db/database');
 // View Shopping Cart
 router.get('/cart', (req, res) => {
   res.render('cart', {
-    title: 'Shopping Cart - CodeAlpha Store'
+    title: 'Shopping Cart - ShopSphere'
   });
 });
 
