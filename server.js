@@ -3,12 +3,14 @@ const session = require('express-session');
 const SQLiteStore = require('connect-sqlite3')(session);
 const path = require('path');
 const dotenv = require('dotenv');
+const crypto = require('crypto');
 
 dotenv.config();
 
 const db = require('./db/database');
 const seed = require('./db/seed');
 const { cartMiddleware } = require('./middleware/auth');
+const { securityHeaders } = require('./middleware/security');
 
 const authRoutes = require('./routes/auth');
 const productsRoutes = require('./routes/products');
@@ -23,22 +25,35 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
 // Middleware
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
+app.use(securityHeaders);
+app.use(express.urlencoded({ extended: true, limit: '1mb' }));
+app.use(express.json({ limit: '1mb' }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Session setup
+const sessionSecret =
+  process.env.SESSION_SECRET || crypto.randomBytes(32).toString('hex');
+
+if (!process.env.SESSION_SECRET) {
+  console.warn(
+    '[security] SESSION_SECRET not set — generated a random secret for this run. Sessions reset on restart.'
+  );
+}
+
 app.use(
   session({
     store: new SQLiteStore({
       db: 'sessions.db',
       dir: path.join(__dirname, 'db')
     }),
-    secret: process.env.SESSION_SECRET || 'shopsphere-secret-key-2026',
+    secret: sessionSecret,
     resave: false,
     saveUninitialized: true,
     cookie: {
-      maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+      httpOnly: true,
+      sameSite: 'lax',
+      secure: process.env.NODE_ENV === 'production'
     }
   })
 );
@@ -51,6 +66,15 @@ app.use('/', authRoutes);
 app.use('/', productsRoutes);
 app.use('/', cartRoutes);
 app.use('/', ordersRoutes);
+
+// Health check (for uptime monitors / containers)
+app.get('/api/health', (req, res) => {
+  res.json({
+    ok: true,
+    name: 'ShopSphere',
+    uptimeSeconds: Math.round(process.uptime())
+  });
+});
 
 // 404 Handler
 app.use((req, res) => {

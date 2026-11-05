@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 const db = require('../db/database');
+const { rateLimit, cap, emailOk } = require('../middleware/security');
 
 // Render Login Page
 router.get('/login', (req, res) => {
@@ -14,8 +15,10 @@ router.get('/login', (req, res) => {
 });
 
 // Handle Login Form Submission
-router.post('/login', async (req, res) => {
-  const { email, password, redirect } = req.body;
+router.post('/login', rateLimit({ max: 10 }), async (req, res) => {
+  const email = cap(req.body.email, 160).trim().toLowerCase();
+  const password = String(req.body.password || '');
+  const redirect = cap(req.body.redirect, 300);
 
   try {
     if (!email || !password) {
@@ -78,8 +81,11 @@ router.get('/register', (req, res) => {
 });
 
 // Handle Register Form Submission
-router.post('/register', async (req, res) => {
-  const { username, email, password, full_name } = req.body;
+router.post('/register', rateLimit({ max: 20 }), async (req, res) => {
+  const username = cap(req.body.username, 32).trim();
+  const email = cap(req.body.email, 160).trim().toLowerCase();
+  const password = String(req.body.password || '');
+  const full_name = cap(req.body.full_name, 80).trim();
 
   try {
     if (!username || !email || !password || !full_name) {
@@ -89,10 +95,17 @@ router.post('/register', async (req, res) => {
       });
     }
 
-    if (password.length < 6) {
+    if (!emailOk(email)) {
       return res.render('register', {
         title: 'Create Account - ShopSphere',
-        error: 'Password must be at least 6 characters long.'
+        error: 'Please enter a valid email address.'
+      });
+    }
+
+    if (password.length < 8) {
+      return res.render('register', {
+        title: 'Create Account - ShopSphere',
+        error: 'Password must be at least 8 characters long.'
       });
     }
 
