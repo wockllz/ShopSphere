@@ -72,6 +72,11 @@
             <% if (product.featured) { %>
               <span class="featured-tag"><i class="fa-solid fa-star"></i> Featured</span>
             <% } %>
+            <% if (typeof product.stock === 'number' && product.stock <= 0) { %>
+              <span class="stock-badge out">Out of stock</span>
+            <% } else if (typeof product.stock === 'number' && product.stock <= 5) { %>
+              <span class="stock-badge low">Only <%= product.stock %> left</span>
+            <% } %>
           </div>
           <div class="card-body">
             <div class="rating">

@@ -1574,3 +1574,17 @@ img {
     grid-template-columns: 1fr;
   }
 }
+
+/* --- live stock badges --- */
+.stock-badge {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+.stock-badge.low { background: #fef3c7; color: #92400e; }
+.stock-badge.out { background: #fee2e2; color: #991b1b; }
